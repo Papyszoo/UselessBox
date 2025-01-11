@@ -1,11 +1,13 @@
-import React, { useRef } from "react";
-import { useGLTF, useAnimations } from "@react-three/drei";
+import React, { useRef, useState } from "react";
+import { useGLTF, useAnimations, useCursor } from "@react-three/drei";
 import * as THREE from "three";
 
 const Box = (props) => {
     const group = useRef();
     const { nodes, animations } = useGLTF("/box.glb");
     const { actions, mixer } = useAnimations(animations, group);
+    const [hovered, setHovered] = useState();
+    useCursor(hovered);
 
     const turnOn = () => {
         if (
@@ -105,6 +107,8 @@ const Box = (props) => {
                 position={[-0.136, 0.461, 0]}
                 rotation={[0, 0, 0.209]}
                 onClick={turnOn}
+                onPointerOver={() => setHovered(true)}
+                onPointerOut={() => setHovered(false)}
             >
                 <meshStandardMaterial
                     color="white"
