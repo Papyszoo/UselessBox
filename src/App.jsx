@@ -16,8 +16,7 @@ function App() {
                 <Stage
                     preset="rembrandt"
                     adjustCamera={false}
-                    center={false}
-                    position-y={-0.01}
+                    center={{ bottom: -0.01 }}
                     intensity={0.5}
                 >
                     <Box scale={0.75} rotation-y={-Math.PI} />
