@@ -8,15 +8,23 @@ const Box = (props) => {
     const { actions, mixer } = useAnimations(animations, group);
 
     const turnOn = () => {
-        const action = mixer.clipAction(animations[1]);
-        action.setLoop(THREE.LoopOnce);
-        action.clampWhenFinished = true;
-        action.play();
+        console.log("test");
+        const turnOnAction = mixer.clipAction(animations[1]);
+        const turnOffAction = mixer.clipAction(animations[0]);
+        turnOnAction.setLoop(THREE.LoopOnce);
+        turnOnAction.clampWhenFinished = true;
+        turnOnAction.play();
         mixer.addEventListener("finished", () => {
-            const turnOffAction = mixer.clipAction(animations[0]);
+            turnOnAction.stop();
             turnOffAction.setLoop(THREE.LoopOnce);
             turnOffAction.clampWhenFinished = true;
             turnOffAction.play();
+            mixer.addEventListener("finished", () => {
+                turnOffAction.stop();
+                turnOffAction.fadeOut();
+                turnOffAction.reset();
+                turnOnAction.reset();
+            });
         });
     };
 
