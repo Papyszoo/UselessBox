@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useGLTF, useAnimations, useCursor } from "@react-three/drei";
 import * as THREE from "three";
 
@@ -8,6 +8,13 @@ const Box = (props) => {
     const { actions, mixer } = useAnimations(animations, group);
     const [hovered, setHovered] = useState();
     useCursor(hovered);
+
+    useEffect(() => {
+        const finishedListener = mixer.addEventListener("finished", (event) => {
+            onFinishedAnimation(event);
+        });
+        return mixer.removeEventListener("finished", finishedListener);
+    }, []);
 
     const turnOn = () => {
         if (
@@ -19,28 +26,22 @@ const Box = (props) => {
         actions.TurnOn.setLoop(THREE.LoopOnce);
         actions.TurnOn.clampWhenFinished = true;
         actions.TurnOn.play();
-        mixer.addEventListener("finished", () => {
-            turnOnFinished();
-        });
     };
 
-    const turnOnFinished = () => {
-        actions.TurnOn.stop();
-        actions.TurnOn.reset();
-        if (actions.TurnOff.isRunning()) {
+    const onFinishedAnimation = (event) => {
+        if (event.action.getClip().name === "TurnOn") {
+            actions.TurnOn.stop();
+            actions.TurnOn.reset();
+            if (actions.TurnOff.isRunning()) {
+            }
+            actions.TurnOff.setLoop(THREE.LoopOnce);
+            actions.TurnOff.clampWhenFinished = true;
+            actions.TurnOff.play();
+        } else if (event.action.getClip().name === "TurnOff") {
+            actions.TurnOff.stop();
+            actions.TurnOff.fadeOut();
+            actions.TurnOff.reset();
         }
-        actions.TurnOff.setLoop(THREE.LoopOnce);
-        actions.TurnOff.clampWhenFinished = true;
-        actions.TurnOff.play();
-        mixer.addEventListener("finished", () => {
-            turnOffFinished();
-        });
-    };
-
-    const turnOffFinished = () => {
-        actions.TurnOff.stop();
-        actions.TurnOff.fadeOut();
-        actions.TurnOff.reset();
     };
 
     return (
