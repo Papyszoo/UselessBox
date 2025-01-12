@@ -156,9 +156,7 @@ const Box = (props) => {
                 material={nodes.Switch.material}
                 position={[-0.136, 0.461, 0]}
                 rotation={[0, 0, 0.209]}
-                onClick={onClickHandler}
-                onPointerOver={() => setHovered(true)}
-                onPointerOut={() => setHovered(false)}
+                onPointerOver={turnOn}
             >
                 <meshStandardMaterial
                     color="white"
