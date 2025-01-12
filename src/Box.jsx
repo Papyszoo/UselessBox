@@ -14,6 +14,7 @@ const Box = (props) => {
     const [hovered, setHovered] = useState();
     const switchOnSoundRef = useRef();
     const switchOffSoundRef = useRef();
+    const rotationSoundRef = useRef();
     useCursor(hovered);
 
     useEffect(() => {
@@ -55,6 +56,7 @@ const Box = (props) => {
         actions.TurnOff.setLoop(THREE.LoopOnce);
         actions.TurnOff.clampWhenFinished = true;
         actions.TurnOff.reset().play();
+        rotationSoundRef.current.play();
         setTimeout(() => switchOffSoundRef.current.play(), 1200);
         setTimeout(() => switchOffSoundRef.current.stop(), 1400);
     };
@@ -68,6 +70,7 @@ const Box = (props) => {
                 break;
             case "TurnOff":
                 actions.TurnOff.fadeOut();
+                rotationSoundRef.current.stop();
         }
     };
 
@@ -124,6 +127,11 @@ const Box = (props) => {
                     color="white"
                     metalness={1}
                     roughness={0}
+                />
+                <PositionalAudio
+                    url="/rotation.wav"
+                    distance={2}
+                    ref={rotationSoundRef}
                 />
             </mesh>
             <mesh
