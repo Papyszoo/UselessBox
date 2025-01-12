@@ -1,4 +1,4 @@
-import React, { act, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
     useGLTF,
     useAnimations,
@@ -23,6 +23,11 @@ const Box = (props) => {
         });
         return mixer.removeEventListener("finished", finishedListener);
     }, []);
+
+    const onClickHandler = (event) => {
+        event.stopPropagation();
+        turnOn();
+    };
 
     const turnOn = () => {
         if (
@@ -83,6 +88,9 @@ const Box = (props) => {
                 geometry={nodes.Box.geometry}
                 material={nodes.Box.material}
                 position={[-0.252, 0.329, -0.007]}
+                onClick={onClickHandler}
+                onPointerOver={() => setHovered(true)}
+                onPointerOut={() => setHovered(false)}
             >
                 <meshStandardMaterial
                     color="black"
@@ -97,6 +105,9 @@ const Box = (props) => {
                 geometry={nodes.Latch.geometry}
                 material={nodes.Latch.material}
                 position={[1, 0.461, -0.001]}
+                onClick={onClickHandler}
+                onPointerOver={() => setHovered(true)}
+                onPointerOut={() => setHovered(false)}
             >
                 <meshStandardMaterial color="black" roughness={0.35} />
             </mesh>
@@ -107,6 +118,9 @@ const Box = (props) => {
                 geometry={nodes.Screw.geometry}
                 material={nodes.Screw.material}
                 position={[-0.136, 0.476, 0]}
+                onClick={onClickHandler}
+                onPointerOver={() => setHovered(true)}
+                onPointerOut={() => setHovered(false)}
             >
                 <meshStandardMaterial
                     color="white"
@@ -142,7 +156,7 @@ const Box = (props) => {
                 material={nodes.Switch.material}
                 position={[-0.136, 0.461, 0]}
                 rotation={[0, 0, 0.209]}
-                onClick={turnOn}
+                onClick={onClickHandler}
                 onPointerOver={() => setHovered(true)}
                 onPointerOut={() => setHovered(false)}
             >
