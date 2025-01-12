@@ -12,7 +12,8 @@ const Box = (props) => {
     const { nodes, animations } = useGLTF("/box.glb");
     const { actions, mixer } = useAnimations(animations, group);
     const [hovered, setHovered] = useState();
-    const clickSoundRef = useRef();
+    const switchOnSoundRef = useRef();
+    const switchOffSoundRef = useRef();
     useCursor(hovered);
 
     useEffect(() => {
@@ -33,31 +34,36 @@ const Box = (props) => {
         actions.TurnOn.clampWhenFinished = true;
         actions.TurnOn.fadeOut();
         actions.TurnOn.reset().play();
-        clickSoundRef.current.play();
-        console.log(clickSoundRef.current);
+        switchOnSoundRef.current.play();
     };
 
     const turnOff = () => {
         if (actions.TurnOff.isRunning() && actions.TurnOff.time > 2) {
-            const newTime =
-                actions.TurnOff.getClip().duration - actions.TurnOff.time;
-            setTimeout(() => clickSoundRef.current.play(), 650 - newTime);
-            setTimeout(() => clickSoundRef.current.stop(), 1400 - newTime);
+            const oldTime = actions.TurnOff.time;
+            const newTime = actions.TurnOff.getClip().duration - oldTime;
+            setTimeout(
+                () => switchOffSoundRef.current.play(),
+                1200 - newTime * 1000
+            );
+            setTimeout(
+                () => switchOffSoundRef.current.stop(),
+                1400 - newTime * 1000
+            );
             actions.TurnOff.time = newTime;
             return;
         }
         actions.TurnOff.setLoop(THREE.LoopOnce);
         actions.TurnOff.clampWhenFinished = true;
         actions.TurnOff.reset().play();
-        setTimeout(() => clickSoundRef.current.play(), 1050);
-        setTimeout(() => clickSoundRef.current.stop(), 1800);
+        setTimeout(() => switchOffSoundRef.current.play(), 1200);
+        setTimeout(() => switchOffSoundRef.current.stop(), 1400);
     };
 
     const onFinishedAnimation = (event) => {
         switch (event.action.getClip().name) {
             case "TurnOn":
                 actions.TurnOn.fadeOut();
-                setTimeout(() => clickSoundRef.current.stop(), 500);
+                setTimeout(() => switchOnSoundRef.current.stop(), 500);
                 turnOff();
                 break;
             case "TurnOff":
@@ -138,9 +144,14 @@ const Box = (props) => {
                     roughness={0}
                 />
                 <PositionalAudio
-                    url="/click.wav"
+                    url="/switchOn.wav"
                     distance={2}
-                    ref={clickSoundRef}
+                    ref={switchOnSoundRef}
+                />
+                <PositionalAudio
+                    url="/switchOff.wav"
+                    distance={2}
+                    ref={switchOffSoundRef}
                 />
             </mesh>
         </group>
