@@ -1,5 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useGLTF, useAnimations, useCursor } from "@react-three/drei";
+import React, { act, useEffect, useRef, useState } from "react";
+import {
+    useGLTF,
+    useAnimations,
+    useCursor,
+    PositionalAudio,
+} from "@react-three/drei";
 import * as THREE from "three";
 
 const Box = (props) => {
@@ -7,6 +12,7 @@ const Box = (props) => {
     const { nodes, animations } = useGLTF("/box.glb");
     const { actions, mixer } = useAnimations(animations, group);
     const [hovered, setHovered] = useState();
+    const clickSoundRef = useRef();
     useCursor(hovered);
 
     useEffect(() => {
@@ -25,22 +31,29 @@ const Box = (props) => {
         }
         actions.TurnOn.setLoop(THREE.LoopOnce);
         actions.TurnOn.clampWhenFinished = true;
-        actions.TurnOn.play();
+        actions.TurnOn.fadeOut();
+        actions.TurnOn.reset().play();
+        console.log(clickSoundRef.current);
+    };
+
+    const turnOff = () => {
+        if (actions.TurnOff.isRunning() && actions.TurnOff.time > 2) {
+            actions.TurnOff.time = actions.TurnOff.time - 1.727;
+            return;
+        }
+        actions.TurnOff.setLoop(THREE.LoopOnce);
+        actions.TurnOff.clampWhenFinished = true;
+        actions.TurnOff.reset().play();
     };
 
     const onFinishedAnimation = (event) => {
-        if (event.action.getClip().name === "TurnOn") {
-            actions.TurnOn.stop();
-            actions.TurnOn.reset();
-            if (actions.TurnOff.isRunning()) {
-            }
-            actions.TurnOff.setLoop(THREE.LoopOnce);
-            actions.TurnOff.clampWhenFinished = true;
-            actions.TurnOff.play();
-        } else if (event.action.getClip().name === "TurnOff") {
-            actions.TurnOff.stop();
-            actions.TurnOff.fadeOut();
-            actions.TurnOff.reset();
+        switch (event.action.getClip().name) {
+            case "TurnOn":
+                actions.TurnOn.fadeOut();
+                turnOff();
+                break;
+            case "TurnOff":
+                actions.TurnOff.fadeOut();
         }
     };
 
@@ -115,6 +128,11 @@ const Box = (props) => {
                     color="white"
                     metalness={1}
                     roughness={0}
+                />
+                <PositionalAudio
+                    url="/click.wav"
+                    distance={2}
+                    ref={clickSoundRef}
                 />
             </mesh>
         </group>
