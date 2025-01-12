@@ -38,7 +38,8 @@ const Box = (props) => {
 
     const turnOff = () => {
         if (actions.TurnOff.isRunning() && actions.TurnOff.time > 2) {
-            actions.TurnOff.time = actions.TurnOff.time - 1.727;
+            actions.TurnOff.time =
+                actions.TurnOff.getClip().duration - actions.TurnOff.time;
             return;
         }
         actions.TurnOff.setLoop(THREE.LoopOnce);
