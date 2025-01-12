@@ -33,24 +33,31 @@ const Box = (props) => {
         actions.TurnOn.clampWhenFinished = true;
         actions.TurnOn.fadeOut();
         actions.TurnOn.reset().play();
+        clickSoundRef.current.play();
         console.log(clickSoundRef.current);
     };
 
     const turnOff = () => {
         if (actions.TurnOff.isRunning() && actions.TurnOff.time > 2) {
-            actions.TurnOff.time =
+            const newTime =
                 actions.TurnOff.getClip().duration - actions.TurnOff.time;
+            setTimeout(() => clickSoundRef.current.play(), 650 - newTime);
+            setTimeout(() => clickSoundRef.current.stop(), 1400 - newTime);
+            actions.TurnOff.time = newTime;
             return;
         }
         actions.TurnOff.setLoop(THREE.LoopOnce);
         actions.TurnOff.clampWhenFinished = true;
         actions.TurnOff.reset().play();
+        setTimeout(() => clickSoundRef.current.play(), 1050);
+        setTimeout(() => clickSoundRef.current.stop(), 1800);
     };
 
     const onFinishedAnimation = (event) => {
         switch (event.action.getClip().name) {
             case "TurnOn":
                 actions.TurnOn.fadeOut();
+                setTimeout(() => clickSoundRef.current.stop(), 500);
                 turnOff();
                 break;
             case "TurnOff":
