@@ -12,7 +12,7 @@ function App() {
             <UI XRstore={store} />
             <Canvas camera={{ position: [0, 0.6, 1] }}>
                 <XR store={store}>
-                    <XROrigin scale={0.1} position={[0.35, 0.6, 1]} />
+                    <XROrigin scale={0.75} position={[0.35, -1, 0.5]} />
                     <color attach="background" args={["skyblue"]} />
                     <ambientLight intensity={0.5} />
                     <OrbitControls
