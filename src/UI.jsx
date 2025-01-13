@@ -32,12 +32,17 @@ const UI = ({ XRstore }) => {
         <>
             <div className="ui-container">
                 <div className="buttons-container">
-                    <button className="ui-button" onClick={toggleAudioEnabled}>
-                        Sound
-                    </button>
-                    <button className="ui-button" onClick={handleEnterVR}>
-                        Enter VR
-                    </button>
+                    <i
+                        className={
+                            "ui-button bi bi-volume-" +
+                            (audioEnabled ? "up" : "mute")
+                        }
+                        onClick={toggleAudioEnabled}
+                    ></i>
+                    <i
+                        className="ui-button bi bi-badge-vr"
+                        onClick={handleEnterVR}
+                    ></i>
                 </div>
             </div>
         </>
