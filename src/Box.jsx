@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
     useGLTF,
     useAnimations,
@@ -65,7 +65,11 @@ const Box = (props) => {
         if (actions.TurnOff.isRunning() && actions.TurnOff.time > 2) {
             const oldTime = actions.TurnOff.time;
             const newTime = actions.TurnOff.getClip().duration - oldTime;
-            playTimedSound(switchOffSoundRef, 1200 - newTime * 1000, 1400);
+            playTimedSound(
+                switchOffSoundRef,
+                1200 - newTime * 1000,
+                1400 - newTime * 1000
+            );
             actions.TurnOff.time = newTime;
             return;
         }
