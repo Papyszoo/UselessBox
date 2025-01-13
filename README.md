@@ -1,8 +1,17 @@
-# React + Vite
+# Useless Box
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Live Site URL
 
-Currently, two official plugins are available:
+[You can check out my progress here](https://useless-box.vercel.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+After installing dependencies with command:
+
+> npm install
+
+You can run your development server with command:
+
+> npm run dev
+
+Then Application can be accessed with this URL:
+
+[http://localhost:2137/](http://localhost:5173/)
