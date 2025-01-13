@@ -14,4 +14,4 @@ You can run your development server with command:
 
 Then Application can be accessed with this URL:
 
-[http://localhost:2137/](http://localhost:5173/)
+[http://localhost:5173/](http://localhost:5173/)
