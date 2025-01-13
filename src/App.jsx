@@ -1,9 +1,8 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Stage } from "@react-three/drei";
 import Box from "./Box";
-import { createXRStore, XR } from "@react-three/xr";
+import { createXRStore, XR, XROrigin } from "@react-three/xr";
 import UI from "./UI";
-import { useEffect } from "react";
 
 const store = createXRStore();
 
@@ -11,8 +10,9 @@ function App() {
     return (
         <>
             <UI XRstore={store} />
-            <Canvas camera={{ position: [0.35, 0.6, 1] }}>
+            <Canvas camera={{ position: [0, 0.6, 1] }}>
                 <XR store={store}>
+                    <XROrigin scale={0.1} position={[0.35, 0.6, 1]} />
                     <color attach="background" args={["skyblue"]} />
                     <ambientLight intensity={0.5} />
                     <OrbitControls
