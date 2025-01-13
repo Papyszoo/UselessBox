@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
     useGLTF,
     useAnimations,
@@ -6,9 +6,11 @@ import {
     PositionalAudio,
 } from "@react-three/drei";
 import * as THREE from "three";
+import useAudioStore from "./useAudioStore";
 
 const Box = (props) => {
     const group = useRef();
+    const audioEnabled = useAudioStore((state) => state.audioEnabled);
     const { nodes, animations } = useGLTF("/box.glb");
     const { actions, mixer } = useAnimations(animations, group);
     const [hovered, setHovered] = useState();
@@ -18,15 +20,31 @@ const Box = (props) => {
     useCursor(hovered);
 
     useEffect(() => {
-        const finishedListener = mixer.addEventListener("finished", (event) => {
-            onFinishedAnimation(event);
-        });
-        return mixer.removeEventListener("finished", finishedListener);
-    }, []);
+        mixer.addEventListener("finished", onFinishedAnimation);
+        if (!audioEnabled) {
+            switchOnSoundRef.current.stop();
+            switchOffSoundRef.current.stop();
+            rotationSoundRef.current.stop();
+        }
+        return () => mixer.removeEventListener("finished", onFinishedAnimation);
+    }, [audioEnabled]);
 
     const onClickHandler = (event) => {
         event.stopPropagation();
         turnOn();
+    };
+
+    const playSound = (ref) => {
+        if (audioEnabled) {
+            ref.current.play();
+        }
+    };
+
+    const playTimedSound = (ref, startTime, endTime) => {
+        if (audioEnabled) {
+            setTimeout(() => ref.current.play(), startTime);
+            setTimeout(() => ref.current.stop(), endTime);
+        }
     };
 
     const turnOn = () => {
@@ -40,30 +58,22 @@ const Box = (props) => {
         actions.TurnOn.clampWhenFinished = true;
         actions.TurnOn.fadeOut();
         actions.TurnOn.reset().play();
-        switchOnSoundRef.current.play();
+        playSound(switchOnSoundRef);
     };
 
     const turnOff = () => {
         if (actions.TurnOff.isRunning() && actions.TurnOff.time > 2) {
             const oldTime = actions.TurnOff.time;
             const newTime = actions.TurnOff.getClip().duration - oldTime;
-            setTimeout(
-                () => switchOffSoundRef.current.play(),
-                1200 - newTime * 1000
-            );
-            setTimeout(
-                () => switchOffSoundRef.current.stop(),
-                1400 - newTime * 1000
-            );
+            playTimedSound(switchOffSoundRef, 1200 - newTime * 1000, 1400);
             actions.TurnOff.time = newTime;
             return;
         }
         actions.TurnOff.setLoop(THREE.LoopOnce);
         actions.TurnOff.clampWhenFinished = true;
         actions.TurnOff.reset().play();
-        rotationSoundRef.current.play();
-        setTimeout(() => switchOffSoundRef.current.play(), 1200);
-        setTimeout(() => switchOffSoundRef.current.stop(), 1400);
+        playSound(rotationSoundRef);
+        playTimedSound(switchOffSoundRef, 1200, 1400);
     };
 
     const onFinishedAnimation = (event) => {
