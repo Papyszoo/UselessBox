@@ -18,6 +18,9 @@ export default defineConfig({
                 short_name: "UselessBox",
                 description: "A box that turns itself off",
                 theme_color: "#000000",
+                id: "UselessBoxVR",
+                display: "standalone",
+                start_url: "/",
                 icons: [
                     {
                         src: "icon192.png",
