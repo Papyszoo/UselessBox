@@ -10,7 +10,7 @@ export default defineConfig({
             registerType: "autoUpdate",
             injectRegister: "auto",
             workbox: {
-                globPatterns: ["**/*.{jsx,css,js,html.png,glb,mp3}"],
+                globPatterns: ["**/*.{jsx,css,js,html,png,glb,mp3}"],
             },
             includeAssets: ["icon192.png", "icon512.png"],
             manifest: {
