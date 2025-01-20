@@ -12,6 +12,25 @@ export default defineConfig({
             workbox: {
                 globPatterns: ["**/*.{jsx,css,js,html.png,glb,mp3}"],
             },
+            includeAssets: ["icon192.png", "icon512.png"],
+            manifest: {
+                name: "UselessBox",
+                short_name: "UselessBox",
+                description: "A box that turns itself off",
+                theme_color: "#000000",
+                icons: [
+                    {
+                        src: "icon192.png",
+                        sizes: "192x192",
+                        type: "image/png",
+                    },
+                    {
+                        src: "icon512.png",
+                        sizes: "512x512",
+                        type: "image/png",
+                    },
+                ],
+            },
         }),
     ],
 });
