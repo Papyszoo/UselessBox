@@ -157,7 +157,7 @@ const Box = (props) => {
                     roughness={0}
                 />
                 <PositionalAudio
-                    url="/rotation.wav"
+                    url="/rotation.mp3"
                     distance={2}
                     ref={rotationSoundRef}
                 />
@@ -178,12 +178,12 @@ const Box = (props) => {
                     roughness={0}
                 />
                 <PositionalAudio
-                    url="/switchOn.wav"
+                    url="/switchOn.mp3"
                     distance={2}
                     ref={switchOnSoundRef}
                 />
                 <PositionalAudio
-                    url="/switchOff.wav"
+                    url="/switchOff.mp3"
                     distance={2}
                     ref={switchOffSoundRef}
                 />

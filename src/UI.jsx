@@ -9,7 +9,7 @@ const UI = ({ XRstore }) => {
     );
     const setSoundEnabled = useAudioStore((state) => state.setSoundEnabled);
     const audio = useMemo(() => {
-        const audio = new Audio("/ambience.wav");
+        const audio = new Audio("/ambience.mp3");
         audio.volume = 0.15;
         return audio;
     }, []);
